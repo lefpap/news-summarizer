@@ -14,7 +14,7 @@ public class NewsSummaryController {
     private final NewsSummaryService newsSummaryService;
 
     @GetMapping("/summaries")
-    public OutputSummary getSummary(@RequestParam(value = "q", required = false) String query) {
+    public OutputSummary getSummary(@RequestParam(value = "q") String query) {
         return newsSummaryService.summarizeNews(query);
     }
 }

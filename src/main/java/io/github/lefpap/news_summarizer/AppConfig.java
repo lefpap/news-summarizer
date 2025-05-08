@@ -1,7 +1,9 @@
 package io.github.lefpap.news_summarizer;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.model.ollama.autoconfigure.OllamaChatProperties;
+import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,5 +32,10 @@ public class AppConfig {
 
         // Generate a proxy implementation of the NewsApiClient interface
         return factory.createClient(NewsApiClient.class);
+    }
+
+    @Bean
+    public ChatClient ollamaChatClient(OllamaChatModel chatModel) {
+        return ChatClient.create(chatModel);
     }
 }
