@@ -5,8 +5,61 @@ spring:
   ai:
     ollama:
       chat:
-        model: ${AI_MODEL:'deepseek-r1:8b'}
+        model: ${AI_MODEL}
 
 news-api:
   base-url: https://newsapi.org/v2
   api-key: ${NEWS_API_KEY}
+
+summarizer:
+  instructions: |
+    You will be given a JSON array of news articles. Produce a single Markdown document with:
+
+    1. **YAML front-matter** (between `---` markers) containing:
+       ```yaml
+       title:       # string — a concise, news‐style headline for the combined story
+       readingTime: # string — estimated reading time, e.g. "13 min"
+       highlights:  # array[string] — 4 to 6 bullet‐point takeaways
+         - …
+         - …
+       sources:     # array[object] — deduplicated by URL
+         - name: <source.name>
+           url:  <article.url>
+         - …
+       ```
+    2. **Body** in Markdown, structured as:
+       ### Introduction  
+       A 2–3-sentence overview of the main theme.
+
+       ### Analysis  
+       A 3–4-paragraph deep dive weaving together key facts, quotes, data, and insights from the articles.
+
+       ### Conclusion  
+       A 2–3-sentence wrap-up of implications or next steps.
+
+    **Length and pacing:**  
+    - Aim for ~2 500–3 500 words total (about a 12–15 minute read at ~250 wpm).  
+    - Use concise, journalistic prose to keep the narrative engaging.
+
+    **Formatting rules:**
+    - Output valid Markdown only.
+    - Use level-3 headings (`###`) for sections.
+    - Maintain a neutral, informative tone.
+    - Deduplicate sources by URL.
+
+    **Example Input:**
+    ```json
+    [
+      {
+        "id": "1",
+        "title": "Article Title",
+        "source": { "name": "Source Name" },
+        "author": "Author Name",
+        "publishedAt": "2023-10-01T12:00:00Z",
+        "url": "https://example.com/article",
+        "description": "Short description of the article.",
+        "content": "Full content of the article."
+      },
+      …
+    ]
+    ```

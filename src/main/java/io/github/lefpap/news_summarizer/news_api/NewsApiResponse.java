@@ -1,4 +1,4 @@
-package io.github.lefpap.news_summarizer;
+package io.github.lefpap.news_summarizer.news_api;
 
 import java.util.List;
 
