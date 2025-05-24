@@ -1,0 +1,24 @@
+meta {
+  name: news
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{api_url}}/news/everything?q=athens&sortBy=popularity&language=en&from=2025-05-01&to=2025-05-30&searchIn=title,description
+  body: none
+  auth: none
+}
+
+params:query {
+  q: athens
+  sortBy: popularity
+  language: en
+  from: 2025-05-01
+  to: 2025-05-30
+  searchIn: title,description
+}
+
+vars:pre-request {
+  : 
+}

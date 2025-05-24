@@ -43,6 +43,7 @@ summarizer:
 
     **Formatting rules:**
     - Output valid Markdown only.
+    - Any text in the front-matter should be wrapped in double quotes.
     - Use level-3 headings (`###`) for sections.
     - Maintain a neutral, informative tone.
     - Deduplicate sources by URL.

@@ -6,8 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Getter
 @Setter
-@ConfigurationProperties(prefix = NewsSummarizerConfigProperties.CONFIG_PREFIX)
-public class NewsSummarizerConfigProperties {
+@ConfigurationProperties(prefix = NewsSummarizerSettings.CONFIG_PREFIX)
+public class NewsSummarizerSettings {
     public static final String CONFIG_PREFIX = "summarizer";
 
     private String instructions;
