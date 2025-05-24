@@ -3,3 +3,12 @@ services:
     image: 'ollama/ollama:latest'
     ports:
       - '11434:11434'
+
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=summarizer'
+      - 'POSTGRES_PASSWORD=summarizer'
+      - 'POSTGRES_USER=summarizer'
+    ports:
+      - '5432:5432'
