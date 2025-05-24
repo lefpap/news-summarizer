@@ -7,6 +7,8 @@ import io.github.lefpap.news_summarizer.news_api.NewsApiQueryParams;
 import io.github.lefpap.news_summarizer.news_api.NewsApiQueryParams.SearchIn;
 import io.github.lefpap.news_summarizer.news_api.NewsApiQueryParams.SortBy;
 import io.github.lefpap.news_summarizer.news_api.NewsApiResponse;
+import io.github.lefpap.news_summarizer.summary.OutputSummary;
+import io.github.lefpap.news_summarizer.summary.OutputSummaryParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -17,7 +19,7 @@ import java.time.LocalDate;
 
 @Service
 @Slf4j
-public class NewsSummaryService {
+public class NewsSummarizerService {
 
     private final NewsApiClient newsApiClient;
     private final ChatClient chatClient;
@@ -26,19 +28,20 @@ public class NewsSummaryService {
 
     private final ObjectMapper objectMapper;
 
-    public NewsSummaryService(NewsApiClient newsApiClient, ChatClient chatClient, OutputSummaryParser outputSummaryParser, Jackson2ObjectMapperBuilder objectMapperBuilder) {
+    public NewsSummarizerService(NewsApiClient newsApiClient, ChatClient chatClient, OutputSummaryParser outputSummaryParser, Jackson2ObjectMapperBuilder objectMapperBuilder) {
         this.newsApiClient = newsApiClient;
         this.chatClient = chatClient;
         this.outputSummaryParser = outputSummaryParser;
         this.objectMapper = objectMapperBuilder.build();
     }
 
-    public OutputSummary summarize(String topic) {
+    public OutputSummary summarize(String query) {
 
+        // TODO: make query parameters configurable
         NewsApiQueryParams queryParams = NewsApiQueryParams.builder()
-            .q(topic)
+            .q(query)
             .from(LocalDate.now())
-            .to(LocalDate.now().minusDays(3))
+            .to(LocalDate.now().minusDays(7))
             .sortBy(SortBy.POPULARITY)
             .searchIn(SearchIn.TITLE, SearchIn.DESCRIPTION)
             .pageSize(10)
@@ -48,8 +51,7 @@ public class NewsSummaryService {
 
         log.info("Fetched {}/{} articles", response.articles().size(), response.totalResults());
 
-        var content = chatClient.prompt()
-            .user(createArticlesSummaryText(response))
+        var content = chatClient.prompt(createArticlesSummaryText(response))
             .call()
             .content();
 

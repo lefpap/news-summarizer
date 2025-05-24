@@ -1,9 +1,10 @@
-package io.github.lefpap.news_summarizer.summarizer;
+package io.github.lefpap.news_summarizer.summary;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -17,8 +18,13 @@ import java.util.regex.Pattern;
 public class OutputSummaryParser {
 
     private static final Pattern MARKDOWN_PATTERN = Pattern.compile("^---\\s*\\n([\\s\\S]*?)\\n---\\s*\\n([\\s\\S]*)$", Pattern.MULTILINE);
+    private final ObjectMapper objectMapper;
 
-    private final ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
+    public OutputSummaryParser(Jackson2ObjectMapperBuilder objectMapperBuilder) {
+        this.objectMapper = objectMapperBuilder
+            .factory(new YAMLFactory())
+            .build();
+    }
 
     public OutputSummary parse(String text) {
         try {
@@ -29,7 +35,7 @@ public class OutputSummaryParser {
             String yamlText = m.group(1);
             String body = m.group(2).trim();
 
-            Map<String, Object> frontMatter = yamlMapper.readValue(
+            Map<String, Object> frontMatter = objectMapper.readValue(
                 yamlText, new TypeReference<>() {
                 }
             );
