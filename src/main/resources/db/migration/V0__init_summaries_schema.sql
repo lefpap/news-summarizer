@@ -1,7 +1,7 @@
 CREATE TABLE summaries (
-  id           SERIAL PRIMARY KEY,
-  title        TEXT,
-  reading_time TEXT,
+  id           UUID PRIMARY KEY,
+  title        VARCHAR(255) NOT NULL,
+  reading_time VARCHAR(50) NOT NULL,
   highlights   JSONB,
   sources      JSONB,
   content      TEXT,

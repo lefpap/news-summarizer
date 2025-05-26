@@ -1,4 +1,4 @@
-package io.github.lefpap.news_summarizer.summary;
+package io.github.lefpap.news_summarizer.summary.api;
 
 import lombok.Builder;
 
@@ -7,17 +7,17 @@ import java.util.List;
 import java.util.UUID;
 
 @Builder(toBuilder = true)
-public record OutputSummary(
+public record ApiSummary(
     UUID id,
     String title,
     String readingTime,
     List<String> highlights,
-    List<Source> sources,
+    List<ApiSource> sources,
     String content,
     LocalDateTime createdAt,
     LocalDateTime updatedAt
 ) {
-    public record Source(
+    public record ApiSource(
         String name,
         String url
     ) {

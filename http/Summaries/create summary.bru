@@ -1,0 +1,34 @@
+meta {
+  name: create summary
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{api_url}}/summaries
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Summary Test",
+    "readingTime": "20 minutes",
+    "highlights": [
+      "highlight 1",
+      "highlight 2",
+      "highlight 3"
+    ],
+    "sources": [
+      {
+        "name": "test 1",
+        "url": "https://test-1.com"
+      },
+      {
+        "name": "test 2",
+        "url": "https://test-2.com"
+      }
+    ],
+    "content": "Test content..."
+  }
+}

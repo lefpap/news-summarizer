@@ -13,9 +13,19 @@ import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class OutputSummaryJdbcMapper {
+
+    private static final String ID_COLUMN = "id";
+    private static final String TITLE_COLUMN = "title";
+    private static final String READING_TIME_COLUMN = "reading_time";
+    private static final String HIGHLIGHTS_COLUMN = "highlights";
+    private static final String SOURCES_COLUMN = "sources";
+    private static final String CONTENT_COLUMN = "content";
+    private static final String CREATED_AT_COLUMN = "created_at";
+    private static final String UPDATED_AT_COLUMN = "updated_at";
 
     private final ObjectMapper objectMapper;
 
@@ -33,24 +43,25 @@ public class OutputSummaryJdbcMapper {
         return (rs, rowNum) -> {
             try {
                 List<String> highlights = objectMapper.readValue(
-                    rs.getString("highlights"),
+                    rs.getString(HIGHLIGHTS_COLUMN),
                     new TypeReference<>() {
                     }
                 );
                 List<OutputSummary.Source> sources = objectMapper.readValue(
-                    rs.getString("sources"),
+                    rs.getString(SOURCES_COLUMN),
                     new TypeReference<>() {
                     }
                 );
 
                 return new OutputSummary(
-                    rs.getString("title"),
-                    rs.getString("reading_time"),
+                    UUID.fromString(rs.getString(ID_COLUMN)),
+                    rs.getString(TITLE_COLUMN),
+                    rs.getString(READING_TIME_COLUMN),
                     highlights,
                     sources,
-                    rs.getString("content"),
-                    rs.getTimestamp("created_at").toLocalDateTime(),
-                    rs.getTimestamp("updated_at").toLocalDateTime()
+                    rs.getString(CONTENT_COLUMN),
+                    rs.getTimestamp(CREATED_AT_COLUMN).toLocalDateTime(),
+                    rs.getTimestamp(UPDATED_AT_COLUMN).toLocalDateTime()
                 );
             } catch (JsonProcessingException ex) {
                 throw new DataRetrievalFailureException("Failed to parse JSON", ex);
@@ -64,11 +75,26 @@ public class OutputSummaryJdbcMapper {
      */
     public MapSqlParameterSource insertParameterSource(OutputSummary summary) {
         return new MapSqlParameterSource()
-            .addValue("title", summary.title())
-            .addValue("reading_time", summary.readingTime())
-            .addValue("highlights", toJsonb(summary.highlights()))
-            .addValue("sources", toJsonb(summary.sources()))
-            .addValue("content", summary.content());
+            .addValue(ID_COLUMN, UUID.randomUUID())
+            .addValue(TITLE_COLUMN, summary.title())
+            .addValue(READING_TIME_COLUMN, summary.readingTime())
+            .addValue(HIGHLIGHTS_COLUMN, toJsonb(summary.highlights()))
+            .addValue(SOURCES_COLUMN, toJsonb(summary.sources()))
+            .addValue(CONTENT_COLUMN, summary.content());
+    }
+
+    /**
+     * Build a MapSqlParameterSource for UPDATE, converting JSON fields
+     * into PGobject with type "jsonb" so Postgres stores them correctly.
+     */
+    public MapSqlParameterSource updateParameterSource(OutputSummary summary) {
+        return new MapSqlParameterSource()
+            .addValue(ID_COLUMN, summary.id())
+            .addValue(TITLE_COLUMN, summary.title())
+            .addValue(READING_TIME_COLUMN, summary.readingTime())
+            .addValue(HIGHLIGHTS_COLUMN, toJsonb(summary.highlights()))
+            .addValue(SOURCES_COLUMN, toJsonb(summary.sources()))
+            .addValue(CONTENT_COLUMN, summary.content());
     }
 
     /**
