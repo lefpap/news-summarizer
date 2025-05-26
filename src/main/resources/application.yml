@@ -15,7 +15,6 @@ spring:
     scheduling:
       pool:
         size: 5
-      thread-name-prefix: news-summarizer-
 
 news-api:
   base-url: https://newsapi.org/v2

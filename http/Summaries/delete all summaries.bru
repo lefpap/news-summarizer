@@ -1,0 +1,28 @@
+meta {
+  name: delete all summaries
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{api_url}}/summaries/all
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Test Summary",
+    "readingTime": "20 minutes",
+    "highlights": [
+      "highlight 1"
+    ],
+    "sources": [
+      {
+        "name": "test 1",
+        "url": "https://test-1.com"
+      }
+    ],
+    "content": "Testing..."
+  }
+}

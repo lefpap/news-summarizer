@@ -1,0 +1,32 @@
+meta {
+  name: update summary
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{api_url}}/summaries/:id
+  body: json
+  auth: none
+}
+
+params:path {
+  id: 86d98b8e-19dd-4ccd-8d5f-933ba1390f6a
+}
+
+body:json {
+  {
+    "title": "Test Summary",
+    "readingTime": "20 minutes",
+    "highlights": [
+      "highlight 1"
+    ],
+    "sources": [
+      {
+        "name": "test 1",
+        "url": "https://test-1.com"
+      }
+    ],
+    "content": "Testing..."
+  }
+}
