@@ -20,8 +20,8 @@ public class OutputSummaryController {
     private final OutputSummaryService service;
 
     @GetMapping
-    public ResponseEntity<List<ApiSummary>> listSummaries() {
-        List<ApiSummary> summaries = service.listSummaries();
+    public ResponseEntity<List<ApiSummary>> listSummaries(@RequestParam(value = "q", required = false) String query) {
+        List<ApiSummary> summaries = service.listSummaries(query);
         return ResponseEntity.ok(summaries);
     }
 
