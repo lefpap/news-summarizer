@@ -16,6 +16,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Configuration class for setting up authentication and authorization.
+ * Configures security filters and authentication providers.
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -23,6 +27,14 @@ public class AuthConfig {
 
     private final AuthSettings authSettings;
 
+    /**
+     * Configures the AuthenticationManager with the API key authentication provider.
+     *
+     * @param http         the HttpSecurity object
+     * @param authProvider the API key authentication provider
+     * @return the configured AuthenticationManager
+     * @throws Exception if an error occurs during configuration
+     */
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, ApiKeyAuthenticationProvider authProvider)
         throws Exception {
@@ -31,6 +43,14 @@ public class AuthConfig {
             .build();
     }
 
+    /**
+     * Configures the security filter chain for handling API requests.
+     *
+     * @param http       the HttpSecurity object
+     * @param authFilter the API key authentication filter
+     * @return the configured SecurityFilterChain
+     * @throws Exception if an error occurs during configuration
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, ApiKeyAuthenticationFilter authFilter)
         throws Exception {

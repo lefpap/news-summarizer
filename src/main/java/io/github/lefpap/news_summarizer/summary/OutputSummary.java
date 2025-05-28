@@ -6,6 +6,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Represents the summarized output of a news article.
+ * Includes metadata, highlights, and content.
+ */
 @Builder(toBuilder = true)
 public record OutputSummary(
     UUID id,
@@ -18,6 +22,10 @@ public record OutputSummary(
     LocalDateTime createdAt,
     LocalDateTime updatedAt
 ) {
+
+    /**
+     * Represents a source referenced in the summary.
+     */
     public record Source(
         String name,
         String url

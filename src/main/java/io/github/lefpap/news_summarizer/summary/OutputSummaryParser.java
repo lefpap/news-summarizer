@@ -13,6 +13,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Parses text into an OutputSummary object.
+ * Extracts YAML front matter and content from the input text.
+ */
 @Component
 @Slf4j
 public class OutputSummaryParser {
@@ -20,12 +24,24 @@ public class OutputSummaryParser {
     private static final Pattern MARKDOWN_PATTERN = Pattern.compile("^---\\s*\\n([\\s\\S]*?)\\n---\\s*\\n([\\s\\S]*)$", Pattern.MULTILINE);
     private final ObjectMapper objectMapper;
 
+    /**
+     * Constructs an OutputSummaryParser with a YAML-enabled ObjectMapper.
+     *
+     * @param objectMapperBuilder the builder for creating the ObjectMapper
+     */
     public OutputSummaryParser(Jackson2ObjectMapperBuilder objectMapperBuilder) {
         this.objectMapper = objectMapperBuilder
             .factory(new YAMLFactory())
             .build();
     }
 
+    /**
+     * Parses the given text into an OutputSummary object.
+     *
+     * @param text the input text containing YAML front matter and content
+     * @return the parsed OutputSummary object
+     * @throws OutputSummaryParsingException if parsing fails
+     */
     public OutputSummary parse(String text) {
         try {
             Matcher m = MARKDOWN_PATTERN.matcher(text);

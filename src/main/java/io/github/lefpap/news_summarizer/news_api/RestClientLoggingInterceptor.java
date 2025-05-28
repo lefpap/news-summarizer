@@ -10,12 +10,26 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Interceptor for logging HTTP requests and responses.
+ * Logs details such as headers, body, and response time.
+ */
 @Component
 @Slf4j
 public class RestClientLoggingInterceptor implements ClientHttpRequestInterceptor {
 
+    /**
+     * Intercepts and logs HTTP requests and responses.
+     *
+     * @param request   the HTTP request
+     * @param body      the request body
+     * @param execution the request execution chain
+     * @return the HTTP response
+     * @throws IOException if an I/O error occurs
+     */
     @Override
-    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
+        throws IOException {
         log.info("==================== Request Start =======================");
         log.info("REQ: {} {}", request.getMethod(), request.getURI());
         log.info("REQ Headers: {}", request.getHeaders());
