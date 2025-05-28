@@ -9,30 +9,38 @@ import java.util.stream.Collectors;
 
 import static java.util.function.Predicate.not;
 
+/**
+ * Represents query parameters for the News API.
+ * Includes validation constraints and utility methods for building queries.
+ *
+ * @param q              the search query string (mandatory)
+ * @param searchIn       fields to search in (e.g., title, description)
+ * @param sources        specific sources to include in the search
+ * @param domains        domains to include in the search
+ * @param excludeDomains domains to exclude from the search
+ * @param from           the start date for the search (inclusive)
+ * @param to             the end date for the search (inclusive)
+ * @param language       the language of the articles (ISO 2-letter codes)
+ * @param sortBy         the sorting criteria for the results
+ * @param pageSize       the number of results per page
+ * @param page           the page number to retrieve
+ */
 public record NewsApiQueryParams(
 
     @NotBlank(message = "`q` (the search query) is mandatory")
-    @Size(max = 500)
-    String q,
-
+    @Size(max = 500) String q,
     @Size(max = 3)
     List<SearchIn> searchIn,
-
     @Size(max = 20)
     List<@NotBlank String> sources,
-
     List<@NotBlank String> domains,
     List<@NotBlank String> excludeDomains,
-
     @PastOrPresent LocalDate from,
     @PastOrPresent LocalDate to,
-
     @Pattern(regexp = "^[a-z]{2}(,[a-z]{2})*$",
         message = "Language must be 2-letter ISO codes separated by commas")
     String language,
-
     SortBy sortBy,
-
     @Min(1) @Max(100) Integer pageSize,
     @Min(1) Integer page
 ) {
@@ -49,10 +57,22 @@ public record NewsApiQueryParams(
     private static final String PAGE_SIZE = "pageSize";
     private static final String PAGE = "page";
 
+    /**
+     * Creates a new Builder instance for constructing NewsApiQueryParams.
+     * The query parameter `q` is mandatory and must be set before building.
+     *
+     * @return a new Builder instance
+     */
     public static Builder builder() {   /* mandatory arg */
         return new Builder();
     }
 
+    /**
+     * Converts this NewsApiQueryParams instance to a Builder.
+     * This allows for easy modification of the parameters.
+     *
+     * @return a new Builder instance with the current parameters set
+     */
     public Builder toBuilder() {
         Builder builder = new Builder();
         builder.q(q);
@@ -69,6 +89,12 @@ public record NewsApiQueryParams(
         return builder;
     }
 
+    /**
+     * Converts the query parameters to a map representation suitable for HTTP requests.
+     * Only non-null and non-empty fields are included in the resulting map.
+     *
+     * @return a map of parameter names to their string values
+     */
     public Map<String, String> toMap() {
         var map = new HashMap<String, String>();
 
@@ -123,6 +149,18 @@ public record NewsApiQueryParams(
         return map;
     }
 
+    /**
+     * Creates a {@link NewsApiQueryParams} instance from a map of query parameters.
+     *
+     * <p>
+     * The map keys should correspond to the parameter names defined in this class
+     * (e\.g\., "q", "searchIn", "sources", etc\.)\. Values are parsed and converted to the appropriate types.
+     * Empty or blank values are ignored where appropriate.
+     *
+     * @param map a map of query parameter names to their string values
+     * @return a {@link NewsApiQueryParams} instance populated with values from the map
+     * @throws IllegalArgumentException if any value cannot be parsed to the expected type
+     */
     public static NewsApiQueryParams of(Map<String, String> map) {
         Builder builder = new Builder();
 
@@ -193,6 +231,9 @@ public record NewsApiQueryParams(
         return builder.build();
     }
 
+    /**
+     * Enum representing the fields to search in for the News API.
+     */
     public enum SearchIn {
         TITLE("title"), DESCRIPTION("description"), CONTENT("content");
         final String value;
@@ -201,10 +242,22 @@ public record NewsApiQueryParams(
             this.value = value;
         }
 
+        /**
+         * Returns the string value of the search field.
+         *
+         * @return the field name
+         */
         public String value() {
             return value;
         }
 
+        /**
+         * Parses a string value to a SearchIn enum.
+         *
+         * @param value the string value
+         * @return the corresponding SearchIn enum
+         * @throws IllegalArgumentException if the value is invalid
+         */
         public static SearchIn of(String value) {
             if (value == null || value.isBlank()) {
                 throw new IllegalArgumentException("Search in value cannot be null or blank");
@@ -219,6 +272,9 @@ public record NewsApiQueryParams(
 
     }
 
+    /**
+     * Enum representing the sorting options for the News API.
+     */
     public enum SortBy {
         RELEVANCY("relevancy"), POPULARITY("popularity"), PUBLISHED_AT("publishedAt");
         final String value;
@@ -227,10 +283,22 @@ public record NewsApiQueryParams(
             this.value = value;
         }
 
+        /**
+         * Returns the string value of the sort option.
+         *
+         * @return the sort option name
+         */
         public String value() {
             return value;
         }
 
+        /**
+         * Parses a string value to a SortBy enum.
+         *
+         * @param value the string value
+         * @return the corresponding SortBy enum
+         * @throws IllegalArgumentException if the value is invalid
+         */
         public static SortBy of(String value) {
             if (value == null || value.isBlank()) {
                 throw new IllegalArgumentException("Sort by value cannot be null or blank");
@@ -244,6 +312,9 @@ public record NewsApiQueryParams(
         }
     }
 
+    /**
+     * Builder for NewsApiQueryParams. Allows step-by-step construction of query parameters.
+     */
     public static final class Builder {
         private String q;                     // mandatory
         private List<SearchIn> searchIn = List.of();

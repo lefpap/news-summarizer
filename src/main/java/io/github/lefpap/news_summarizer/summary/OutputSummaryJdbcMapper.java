@@ -15,6 +15,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Maps database rows to OutputSummary objects.
+ * Handles JSONB deserialization for highlights and sources.
+ */
 @Component
 public class OutputSummaryJdbcMapper {
 
@@ -30,6 +34,11 @@ public class OutputSummaryJdbcMapper {
 
     private final ObjectMapper objectMapper;
 
+    /**
+     * Constructs an OutputSummaryJdbcMapper with a configured ObjectMapper.
+     *
+     * @param objectMapperBuilder the builder for creating the ObjectMapper
+     */
     public OutputSummaryJdbcMapper(Jackson2ObjectMapperBuilder objectMapperBuilder) {
         this.objectMapper = objectMapperBuilder
             .modules(new JavaTimeModule())
@@ -37,8 +46,9 @@ public class OutputSummaryJdbcMapper {
     }
 
     /**
-     * RowMapper that reads JSONB columns as strings and deserializes them
-     * back into List<String> and List<Source>.
+     * Provides a RowMapper for mapping database rows to OutputSummary objects.
+     *
+     * @return a RowMapper for OutputSummary
      */
     public RowMapper<OutputSummary> rowMapper() {
         return (rs, rowNum) -> {
@@ -74,6 +84,9 @@ public class OutputSummaryJdbcMapper {
     /**
      * Build a MapSqlParameterSource for INSERT, converting JSON fields
      * into PGobject with type "jsonb" so Postgres stores them correctly.
+     *
+     * @param summary the OutputSummary object to insert
+     * @return a MapSqlParameterSource for the INSERT operation
      */
     public MapSqlParameterSource insertParameterSource(OutputSummary summary) {
         return new MapSqlParameterSource()
@@ -89,6 +102,9 @@ public class OutputSummaryJdbcMapper {
     /**
      * Build a MapSqlParameterSource for UPDATE, converting JSON fields
      * into PGobject with type "jsonb" so Postgres stores them correctly.
+     *
+     * @param summary the OutputSummary object to update
+     * @return a MapSqlParameterSource for the UPDATE operation
      */
     public MapSqlParameterSource updateParameterSource(OutputSummary summary) {
         return new MapSqlParameterSource()
@@ -103,6 +119,9 @@ public class OutputSummaryJdbcMapper {
 
     /**
      * Helper to wrap any serializable object into a PGobject("jsonb").
+     *
+     * @param value the object to convert to JSONB
+     * @return a PGobject containing the JSONB representation
      */
     private PGobject toJsonb(Object value) {
         try {

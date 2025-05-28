@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Represents a summary of a news article in the API response format.
+ */
 @Builder(toBuilder = true)
 public record ApiSummary(
     UUID id,

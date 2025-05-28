@@ -16,18 +16,26 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-
+/**
+ * Service for summarizing news articles.
+ */
 @Service
 @Slf4j
 public class NewsSummarizerService {
 
     private final NewsApiClient newsApiClient;
     private final ChatClient chatClient;
-
     private final OutputSummaryParser outputSummaryParser;
-
     private final ObjectMapper objectMapper;
 
+    /**
+     * Constructs a NewsSummarizerService with the specified dependencies.
+     *
+     * @param newsApiClient       the News API client
+     * @param chatClient          the chat client for AI interactions
+     * @param outputSummaryParser the parser for output summaries
+     * @param objectMapperBuilder the builder for the ObjectMapper
+     */
     public NewsSummarizerService(NewsApiClient newsApiClient, ChatClient chatClient, OutputSummaryParser outputSummaryParser, Jackson2ObjectMapperBuilder objectMapperBuilder) {
         this.newsApiClient = newsApiClient;
         this.chatClient = chatClient;
@@ -35,6 +43,12 @@ public class NewsSummarizerService {
         this.objectMapper = objectMapperBuilder.build();
     }
 
+    /**
+     * Summarizes news articles based on the specified query.
+     *
+     * @param query the search query for news articles
+     * @return the summarized output
+     */
     public OutputSummary summarize(String query) {
 
         // TODO: make query parameters configurable
