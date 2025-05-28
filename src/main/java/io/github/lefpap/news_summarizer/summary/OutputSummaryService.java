@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -17,7 +18,13 @@ public class OutputSummaryService {
     private final OutputSummaryJdbcRepository repository;
     private final OutputSummaryMapper mapper;
 
-    public List<ApiSummary> listSummaries() {
+    public List<ApiSummary> listSummaries(String query) {
+        if (Objects.nonNull(query) && !query.isBlank()) {
+            return repository.findAllMatched(query).stream()
+                .map(mapper::toApi)
+                .toList();
+        }
+
         return repository.findAll().stream()
             .map(mapper::toApi)
             .toList();

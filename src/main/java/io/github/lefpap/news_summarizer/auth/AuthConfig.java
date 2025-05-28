@@ -53,9 +53,6 @@ public class AuthConfig {
             .requestMatchers(HttpMethod.GET, "/api/v1/summaries/**")
             .hasAnyRole(AuthRole.READ_ONLY.name(), AuthRole.FULL_ACCESS.name())
 
-            .requestMatchers(HttpMethod.POST, "/api/v1/summaries/search")
-            .hasAnyRole(AuthRole.READ_ONLY.name(), AuthRole.FULL_ACCESS.name())
-
             .requestMatchers("/api/v1/summaries/**")
             .hasRole(AuthRole.FULL_ACCESS.name())
         );

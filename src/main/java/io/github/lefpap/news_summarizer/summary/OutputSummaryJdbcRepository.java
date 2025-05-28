@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static io.github.lefpap.news_summarizer.summary.OutputSummarySql.INSERT_SQL;
+import static io.github.lefpap.news_summarizer.summary.OutputSummarySql.SELECT_ALL_MATCHED_SQL;
 import static io.github.lefpap.news_summarizer.summary.OutputSummarySql.SELECT_ALL_SQL;
 import static io.github.lefpap.news_summarizer.summary.OutputSummarySql.SELECT_BY_ID_SQL;
 
@@ -21,6 +22,14 @@ public class OutputSummaryJdbcRepository {
 
     public List<OutputSummary> findAll() {
         return jdbcClient.sql(SELECT_ALL_SQL)
+            .query(jdbcMapper.rowMapper())
+            .list();
+    }
+
+    public List<OutputSummary> findAllMatched(String query) {
+        return jdbcClient.sql(SELECT_ALL_MATCHED_SQL)
+            .param("title", query)
+            .param("description", query)
             .query(jdbcMapper.rowMapper())
             .list();
     }

@@ -10,6 +10,12 @@ public class OutputSummarySql {
         SELECT * FROM summaries
         """;
 
+    public static final String SELECT_ALL_MATCHED_SQL = """
+        SELECT * FROM summaries
+        WHERE title ILIKE '%' || :title || '%'
+        OR description ILIKE '%' || :description || '%'
+        """;
+
     public static final String SELECT_BY_ID_SQL = """
         SELECT * FROM summaries
         WHERE id = :id
