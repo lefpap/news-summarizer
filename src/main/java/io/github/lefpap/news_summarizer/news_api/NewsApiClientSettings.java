@@ -9,7 +9,7 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = NewsApiClientSettings.CONFIG_PREFIX)
 public class NewsApiClientSettings {
 
-    public static final String CONFIG_PREFIX = "news-api";
+    public static final String CONFIG_PREFIX = "app.news-api";
 
     private String baseUrl;
     private String apiKey;

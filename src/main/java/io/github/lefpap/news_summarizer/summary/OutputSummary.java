@@ -10,6 +10,7 @@ import java.util.UUID;
 public record OutputSummary(
     UUID id,
     String title,
+    String description,
     String readingTime,
     List<String> highlights,
     List<Source> sources,

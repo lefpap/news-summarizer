@@ -15,6 +15,7 @@ public class OutputSummaryMapper {
         return ApiSummary.builder()
             .id(summary.id())
             .title(summary.title())
+            .description(summary.description())
             .readingTime(summary.readingTime())
             .highlights(summary.highlights())
             .sources(toApiSources(summary.sources()))
@@ -27,6 +28,7 @@ public class OutputSummaryMapper {
     public OutputSummary toOutputSummary(ApiCreateSummaryRequest request) {
         return OutputSummary.builder()
             .title(request.title())
+            .description(request.description())
             .readingTime(request.readingTime())
             .highlights(request.highlights())
             .sources(toOutputSources(request.sources()))
@@ -37,6 +39,7 @@ public class OutputSummaryMapper {
     public OutputSummary applyAndGetUpdate(OutputSummary summary, ApiUpdateSummaryRequest request) {
         return summary.toBuilder()
             .title(request.title())
+            .description(request.description())
             .readingTime(request.readingTime())
             .highlights(request.highlights())
             .sources(toOutputSources(request.sources()))

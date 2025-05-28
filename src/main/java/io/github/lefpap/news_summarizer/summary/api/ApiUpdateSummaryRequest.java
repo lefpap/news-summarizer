@@ -4,6 +4,7 @@ import java.util.List;
 
 public record ApiUpdateSummaryRequest(
     String title,
+    String description,
     String content,
     String readingTime,
     String language,

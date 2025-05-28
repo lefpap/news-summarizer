@@ -15,7 +15,7 @@ public class NewsSummarizerScheduler {
     private final NewsSummarizerService newsSummarizerService;
     private final OutputSummaryJdbcRepository summaryRepository;
 
-    @Scheduled(cron = "${summarizer.cron}")
+    @Scheduled(cron = "${app.summarizer.cron}")
     public void automaticSummarization() {
         OutputSummary summary = newsSummarizerService.summarize("AI");
         OutputSummary saved = summaryRepository.save(summary);

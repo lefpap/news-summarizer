@@ -42,6 +42,7 @@ public class OutputSummaryParser {
 
             var summaryBuilder = OutputSummary.builder();
             summaryBuilder.title((String) frontMatter.get("title"));
+            summaryBuilder.description((String) frontMatter.get("description"));
             summaryBuilder.readingTime((String) frontMatter.get("readingTime"));
 
             @SuppressWarnings("unchecked")
