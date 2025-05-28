@@ -8,4 +8,10 @@ public record NewsApiArticle(
     String url,
     String content,
     String publishedAt
-) {}
+) {
+    public record NewsApiSource(
+        String id,
+        String name
+    ) {
+    }
+}

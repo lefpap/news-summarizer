@@ -20,6 +20,7 @@ public class OutputSummaryJdbcMapper {
 
     private static final String ID_COLUMN = "id";
     private static final String TITLE_COLUMN = "title";
+    private static final String DESCRIPTION_COLUMN = "description";
     private static final String READING_TIME_COLUMN = "reading_time";
     private static final String HIGHLIGHTS_COLUMN = "highlights";
     private static final String SOURCES_COLUMN = "sources";
@@ -53,16 +54,17 @@ public class OutputSummaryJdbcMapper {
                     }
                 );
 
-                return new OutputSummary(
-                    UUID.fromString(rs.getString(ID_COLUMN)),
-                    rs.getString(TITLE_COLUMN),
-                    rs.getString(READING_TIME_COLUMN),
-                    highlights,
-                    sources,
-                    rs.getString(CONTENT_COLUMN),
-                    rs.getTimestamp(CREATED_AT_COLUMN).toLocalDateTime(),
-                    rs.getTimestamp(UPDATED_AT_COLUMN).toLocalDateTime()
-                );
+                return OutputSummary.builder()
+                    .id(UUID.fromString(rs.getString(ID_COLUMN)))
+                    .title(rs.getString(TITLE_COLUMN))
+                    .description(rs.getString(DESCRIPTION_COLUMN))
+                    .readingTime(rs.getString(READING_TIME_COLUMN))
+                    .highlights(highlights)
+                    .sources(sources)
+                    .content(rs.getString(CONTENT_COLUMN))
+                    .createdAt(rs.getTimestamp(CREATED_AT_COLUMN).toLocalDateTime())
+                    .updatedAt(rs.getTimestamp(UPDATED_AT_COLUMN).toLocalDateTime())
+                    .build();
             } catch (JsonProcessingException ex) {
                 throw new DataRetrievalFailureException("Failed to parse JSON", ex);
             }
@@ -77,6 +79,7 @@ public class OutputSummaryJdbcMapper {
         return new MapSqlParameterSource()
             .addValue(ID_COLUMN, UUID.randomUUID())
             .addValue(TITLE_COLUMN, summary.title())
+            .addValue(DESCRIPTION_COLUMN, summary.description())
             .addValue(READING_TIME_COLUMN, summary.readingTime())
             .addValue(HIGHLIGHTS_COLUMN, toJsonb(summary.highlights()))
             .addValue(SOURCES_COLUMN, toJsonb(summary.sources()))
@@ -91,6 +94,7 @@ public class OutputSummaryJdbcMapper {
         return new MapSqlParameterSource()
             .addValue(ID_COLUMN, summary.id())
             .addValue(TITLE_COLUMN, summary.title())
+            .addValue(DESCRIPTION_COLUMN, summary.description())
             .addValue(READING_TIME_COLUMN, summary.readingTime())
             .addValue(HIGHLIGHTS_COLUMN, toJsonb(summary.highlights()))
             .addValue(SOURCES_COLUMN, toJsonb(summary.sources()))

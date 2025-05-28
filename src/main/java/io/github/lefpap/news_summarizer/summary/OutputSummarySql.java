@@ -17,15 +17,16 @@ public class OutputSummarySql {
 
     public static final String INSERT_SQL = """
         INSERT INTO summaries
-            (id, title, reading_time, highlights, sources, content)
+            (id, title, description, reading_time, highlights, sources, content)
         VALUES
-            (:id, :title, :reading_time, :highlights, :sources, :content)
+            (:id, :title, :description, :reading_time, :highlights, :sources, :content)
         RETURNING *
         """;
 
     public static final String UPDATE_SQL = """
         UPDATE summaries SET
             title = :title,
+            description = :description,
             reading_time = :reading_time,
             highlights = :highlights,
             sources = :sources,
